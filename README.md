@@ -284,8 +284,8 @@ node json.py --port=3000              # HTTP transport
 
 ```bash
 # Clone the repository
-git clone https://github.com/adi2355/Model-Context-Protocol-servers.git
-cd Model-Context-Protocol-servers
+git clone https://github.com/adi2355/MCP-Server-Collection.git
+cd MCP-Server-Collection
 
 # Firecrawl server
 cd firecrawl-mcp-server && npm install && npm run build && cd ..

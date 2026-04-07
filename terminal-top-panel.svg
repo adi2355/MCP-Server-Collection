@@ -84,7 +84,7 @@
     letter-spacing="0.5"
     fill="#60584f"
   >
-    model-context-protocol-servers.txt
+    mcp-server-collection.txt
   </text>
 
   <!-- seam under title bar -->
