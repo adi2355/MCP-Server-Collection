@@ -1,352 +1,314 @@
-# Model-Context-Protocol Servers
+<div align="center">
+  <img src="./terminal-top-panel.svg" alt="Terminal Top Panel" width="100%" />
+</div>
 
-A collection of specialized MCP (Model Context Protocol) servers for different use cases.
+<br>
 
-## 1. Leafly Cannabis Strain Data Scraper
+## Overview
 
-This MCP server implements a specialized scraper for collecting structured cannabis strain data from Leafly.com, following a standardized schema and methodology.
+This repository contains a collection of purpose-built [Model Context Protocol](https://modelcontextprotocol.io/) servers, each designed around a specific capability: web scraping and structured data extraction, codebase navigation and analysis, LLM-powered text generation, and JSON querying. Every server exposes its functionality as MCP tools and resources, making them composable building blocks for AI agent workflows.
 
-### Installation
+The servers span two language ecosystems — TypeScript for the Firecrawl integration and DeepSeek/JSON servers, Python for the codebase analysis server — and follow the MCP SDK conventions for tool definitions, resource URIs, and transport configuration (stdio and HTTP).
 
-1. Ensure you have Node.js 18+ installed
-2. Clone the repository
-3. Install dependencies:
-   ```bash
-   cd firecrawl-mcp-server
-   npm install
-   ```
-4. Set up environment variables:
-   ```bash
-   # Copy the example .env file
-   cp .env.example .env
-   
-   # Edit the .env file and add your Firecrawl API key
-   # You can obtain an API key from https://mendable.ai/firecrawl
-   nano .env  # or use any text editor
-   ```
-5. Build the project:
-   ```bash
-   npm run build
-   ```
+<br>
 
-### API Key Requirement
+## Technology Stack
 
-**Important**: This scraper requires a valid Firecrawl API key to function. If you try to run the scraper without a valid API key, you will receive a 401 Unauthorized error.
+<table>
+<tr>
+<td><strong>Languages</strong></td>
+<td><img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" /> <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python" /> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black" alt="JavaScript" /></td>
+</tr>
+<tr>
+<td><strong>MCP Framework</strong></td>
+<td><img src="https://img.shields.io/badge/MCP_SDK-000000?style=flat-square&logoColor=white" alt="MCP SDK" /> <img src="https://img.shields.io/badge/FastMCP-000000?style=flat-square&logoColor=white" alt="FastMCP" /></td>
+</tr>
+<tr>
+<td><strong>Web Scraping</strong></td>
+<td><img src="https://img.shields.io/badge/Firecrawl-FF6B35?style=flat-square&logoColor=white" alt="Firecrawl" /> <img src="https://img.shields.io/badge/LLM_Extract-8B5CF6?style=flat-square&logoColor=white" alt="LLM Extract" /></td>
+</tr>
+<tr>
+<td><strong>AI Integration</strong></td>
+<td><img src="https://img.shields.io/badge/DeepSeek_R1-0066FF?style=flat-square&logoColor=white" alt="DeepSeek R1" /> <img src="https://img.shields.io/badge/OpenAI_SDK-412991?style=flat-square&logo=openai&logoColor=white" alt="OpenAI SDK" /></td>
+</tr>
+<tr>
+<td><strong>Data & Querying</strong></td>
+<td><img src="https://img.shields.io/badge/JSONPath-000000?style=flat-square&logo=json&logoColor=white" alt="JSONPath" /> <img src="https://img.shields.io/badge/CSV-217346?style=flat-square&logoColor=white" alt="CSV" /></td>
+</tr>
+<tr>
+<td><strong>Runtime</strong></td>
+<td><img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node.js" /> <img src="https://img.shields.io/badge/Python_3.12+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python 3.12+" /></td>
+</tr>
+<tr>
+<td><strong>Tooling</strong></td>
+<td><img src="https://img.shields.io/badge/Jest-C21325?style=flat-square&logo=jest&logoColor=white" alt="Jest" /> <img src="https://img.shields.io/badge/ESLint-4B32C3?style=flat-square&logo=eslint&logoColor=white" alt="ESLint" /> <img src="https://img.shields.io/badge/Prettier-F7B93E?style=flat-square&logo=prettier&logoColor=black" alt="Prettier" /> <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker" /></td>
+</tr>
+</table>
 
-You can set the API key in one of two ways:
+<br>
 
-1. **Environment Variable**:
-   ```bash
-   export FIRECRAWL_API_KEY=your_api_key_here
-   ```
+## Server Index
 
-2. **In a .env file**:
-   ```
-   FIRECRAWL_API_KEY=your_api_key_here
-   ```
+| Server | Language | Transport | Tools | Resources | Description |
+|:-------|:---------|:----------|:------|:----------|:------------|
+| [**Firecrawl Web Scraping**](#firecrawl-web-scraping-server) | TypeScript | stdio | 10 | &mdash; | Web scraping, crawling, batch processing, LLM extraction, deep research, and cannabis strain data extraction |
+| [**Codebase Analysis**](#codebase-analysis-server) | Python | stdio | 6 | 4 | File system navigation, code search, project structure analysis, and real-time change monitoring |
+| [**DeepSeek R1**](#deepseek-r1-server) | JavaScript | stdio | 5 | 5 | Text generation, summarization, streaming, multi-model support, and document processing via DeepSeek AI |
+| [**JSON Manager**](#json-manager-server) | JavaScript | stdio / HTTP | 4 | 4 | JSONPath querying, advanced filtering, dataset comparison, and result caching |
 
-### Features
+<br>
 
-- Scrapes 66 standardized data points for each cannabis strain from Leafly.com
-- Follows a consistent methodology for data extraction and normalization
-- Handles cases where data is missing or inconsistent
-- Exports data in CSV or JSON format
-- Built-in fallback mechanisms for strains that aren't directly accessible
+---
 
-### Implementation Approaches
+## Firecrawl Web Scraping Server
 
-#### Regex-Based Extraction
+A comprehensive MCP server built on the [Firecrawl](https://github.com/mendableai/firecrawl) platform for web scraping, content extraction, and structured data collection. Extends the base Firecrawl capabilities with a specialized cannabis strain data extraction pipeline that collects 66 standardized data points per strain from Leafly.com using dual extraction strategies: regex-based pattern matching and LLM-powered schema extraction.
 
-The repository includes a regex-based scraper that extracts data using pattern matching:
+### Tools
 
-```typescript
-// Extract cannabinoids using regex
-function extractCannabinoids(content: string, strainData: StrainData): void {
-  // THC extraction
-  const thcMatch = content.match(/THC\s+(\d+(?:\.\d+)?)-?(\d+(?:\.\d+)?)?\s*%/i);
-  if (thcMatch) {
-    // Take higher end of range per methodology
-    const thcValue = thcMatch[2] ? parseFloat(thcMatch[2]) : parseFloat(thcMatch[1]);
-    strainData["cannabinoids.THC"] = thcValue / 100;
-  }
-  
-  // Similar patterns for other cannabinoids
-}
-```
+| Tool | Description |
+|:-----|:------------|
+| `firecrawl_scrape` | Scrape a single page with format selection (markdown, HTML, screenshots), custom actions, and content filtering |
+| `firecrawl_map` | Discover all URLs on a website and generate a site map |
+| `firecrawl_crawl` | Recursively crawl a website with depth and page limits |
+| `firecrawl_batch_scrape` | Scrape multiple URLs concurrently with queue-based processing |
+| `firecrawl_check_batch_status` | Poll the status of an in-progress batch scrape job |
+| `firecrawl_check_crawl_status` | Poll the status of an in-progress crawl job |
+| `firecrawl_search` | Search the web and return scraped content from results |
+| `firecrawl_extract` | LLM-powered structured data extraction using a caller-defined JSON schema |
+| `firecrawl_deep_research` | Multi-step research workflow that scrapes, synthesizes, and reports on a topic |
+| `firecrawl_leafly_strain` | Extract standardized cannabis strain data (cannabinoids, terpenes, effects, flavors, interactions) |
 
-#### LLM-Powered Extraction
+### Strain Data Extraction Pipeline
 
-The repository also includes an advanced LLM-powered extraction method that uses structured schemas and AI to extract information more accurately:
+The Leafly strain extractor is the most specialized component in this collection. It implements two complementary extraction strategies against the same data source:
 
-```typescript
-// Using the extract tool for LLM-powered extraction
-const strainSchema = {
-  type: 'object',
-  properties: {
-    "strain_name": { type: 'string' },
-    "aliases": { type: 'string' },
-    "strain_classification": { type: 'string' },
-    "thc_percentage": { type: 'number' },
-    "cbd_percentage": { type: 'number' },
-    "cbg_percentage": { type: 'number' },
-    "terpenes": { 
-      type: 'object',
-      properties: {
-        "myrcene": { type: 'string' },
-        "caryophyllene": { type: 'string' }
-        // Other terpenes...
-      }
-    },
-    // Other properties...
-  }
-};
+**Regex-based extraction** parses raw HTML/markdown content with pattern-matching rules for cannabinoid percentages, terpene profiles, effect ratings, and flavor descriptors. This approach is deterministic and fast, but brittle against layout changes.
 
-// Extract data using LLM
-const extractedData = await client.extract([strainUrl], {
-  schema: strainSchema,
-  systemPrompt: "Extract precise cannabis strain data. Use exact numbers when available.",
-  prompt: `Extract all available data for the cannabis strain "${strain}" according to the schema.`
-});
-```
+**LLM-powered extraction** uses Firecrawl's `extract` endpoint to send page content to an LLM with a structured JSON schema. This approach handles unstructured text, formatting variations, and missing data more gracefully, at the cost of API latency and token usage.
 
-Benefits of LLM extraction:
-- Better handling of unstructured text and variations in formatting
-- More resilient to website changes
-- Can infer missing values based on context
-- Extracts relationships between data points
+Both strategies normalize output to a consistent schema covering:
 
-### Data Structure
+| Category | Fields |
+|:---------|:-------|
+| **Cannabinoids** | THC, CBD, CBG, CBN |
+| **Terpenes** | Myrcene, Pinene, Caryophyllene, Limonene, Linalool, Terpinolene, Ocimene, Humulene |
+| **Medical Effects** | Stress, Anxiety, Depression, Pain, Insomnia, Lack of Appetite, Nausea |
+| **User Effects** | Happy, Euphoric, Creative, Relaxed, Uplifted, Energetic, Focused, Sleepy, Hungry, Talkative, Tingly, Giggly |
+| **Adverse Effects** | Dry Mouth, Dry Eyes, Dizzy, Paranoid, Anxious |
+| **Flavors** | Berry, Sweet, Earthy, Pungent, Pine, Vanilla, Minty, Skunky, Citrus, Spicy, Herbal, Diesel, Tropical, Fruity, Grape |
+| **Pharmacokinetics** | Onset (minutes), Duration (hours) |
+| **Drug Interactions** | Sedatives, Benzodiazepines, SSRIs, Opioid Analgesics, Anticonvulsants, Anticoagulants |
 
-The scraper collects the following categories of data for each strain:
+**Normalization methodology**: lab-tested data is prioritized. When exact values are unavailable, standardized normalization is applied (dominant terpene = 0.008, second = 0.005, third = 0.003). Effects and flavors are normalized to a 0.0&ndash;1.0 scale.
 
-- **Basic Information**: Strain name
-- **Terpenes**: myrcene, pinene, caryophyllene, limonene, linalool, terpinolene, ocimene, humulene, other
-- **Cannabinoids**: THC, CBD, CBG, CBN, other
-- **Medical Effects**: Stress, Anxiety, Depression, Pain, Insomnia, Lack of Appetite, Nausea, other
-- **User Effects**: Happy, Euphoric, Creative, Relaxed, Uplifted, Energetic, Focused, Sleepy, Hungry, Talkative, Tingly, Giggly, DryMouth, DryEyes, Dizzy, Paranoid, Anxious, other
-- **Onset and Duration**: onset_minutes, duration_hours
-- **Interactions**: Sedatives, Anti-anxiety (benzodiazepines), Antidepressants (SSRIs), Opioid analgesics, Anticonvulsants, Anticoagulants, other
-- **Flavors**: Berry, Sweet, Earthy, Pungent, Pine, Vanilla, Minty, Skunky, Citrus, Spicy, Herbal, Diesel, Tropical, Fruity, Grape, other
-
-### Usage
-
-#### As a Firecrawl MCP Tool
-
-Once integrated with the Firecrawl MCP server, the tool can be called with the following parameters:
-
-```json
-{
-  "name": "firecrawl_leafly_strain",
-  "arguments": {
-    "strains": ["Blue Dream", "OG Kush", "Sour Diesel"],
-    "exportFormat": "csv"  // or "json"
-  }
-}
-```
-
-#### Using the Extract Tool Directly
-
-For more advanced extraction with the LLM-powered approach:
-
-```json
-{
-  "name": "firecrawl_extract",
-  "arguments": {
-    "urls": ["https://www.leafly.com/strains/blue-dream"],
-    "schema": {
-      "type": "object",
-      "properties": {
-        "strain_name": { "type": "string" },
-        "thc_percentage": { "type": "number" },
-        "cbd_percentage": { "type": "number" },
-        "effects": { "type": "string" },
-        "flavors": { "type": "string" },
-        "medical": { "type": "string" },
-        "terpenes": { "type": "object" }
-      }
-    },
-    "prompt": "Extract comprehensive cannabis strain data from this Leafly page."
-  }
-}
-```
-
-#### Using the CLI Script
-
-You can also use the included CLI script to run the scraper directly:
+### Quick Start
 
 ```bash
-# Set the Firecrawl API key (required)
-export FIRECRAWL_API_KEY=your_api_key_here
+cd firecrawl-mcp-server
+npm install
+cp .env.example .env          # Add your FIRECRAWL_API_KEY
+npm run build
+npm start                     # Start the MCP server (stdio transport)
+```
 
-# Using npm scripts
+```bash
+# CLI: extract strain data directly
 npm run scrape-leafly -- output.csv "Blue Dream,OG Kush,Sour Diesel"
-
-# Or running directly
-node dist/leafly-scraper-cli.js output.csv "Blue Dream,OG Kush,Sour Diesel"
 ```
 
-### Methodology
+<br>
 
-The scraper follows a rigorous methodology for extracting and normalizing data:
+---
 
-1. **Lab Data Priority**: Lab-tested cannabinoid and terpene data is prioritized when available
-2. **Consistent Normalization**: When exact values aren't available, standardized normalization is applied:
-   - For terpenes: dominant = 0.008, second = 0.005, third = 0.003, others = 0.001
-   - For effects and flavors: Values are normalized to a 0.0-1.0 scale
-3. **Default Values**: Standard defaults are applied for commonly missing fields
+## Codebase Analysis Server
 
-### Troubleshooting
+A Python MCP server for navigating and analyzing codebases. Provides file system access, text search, function discovery, dependency analysis, and real-time file change monitoring via watchdog. Built with the Python MCP SDK's `FastMCP` framework.
 
-#### TypeScript Errors
+### Tools
 
-If you encounter TypeScript compilation errors:
-
-1. Ensure you have all dependencies installed: `npm install`
-2. Make sure TypeScript is installed: `npm install -g typescript`
-3. TypeScript module errors can typically be fixed by installing the @types packages:
-   ```bash
-   npm install --save-dev @types/node
-   ```
-
-## 2. Python Codebase MCP Server
-
-This MCP server provides code analysis capabilities and file system access for codebase navigation.
-
-### Installation
-
-1. Ensure you have Python 3.7+ installed
-2. Install dependencies:
-   ```bash
-   pip install mcp-python-sdk watchdog
-   ```
-
-### Features
-
-- File system navigation and file reading
-- Code search functionality
-- Project structure analysis
-- Real-time file change monitoring
-- Function and component discovery
-- Dependency analysis
-
-### Usage
-
-Start the server:
-
-```bash
-python mcp_server.py
-```
-
-The server provides tools for code analysis:
-
-- **search_function**: Find function definitions in code files
-- **search_code**: Search for text across all code files
-- **get_project_structure**: Generate a tree-like structure of the project
-- **analyze_dependencies**: Analyze project dependencies
-- **find_components**: Discover React/React Native components
+| Tool | Description |
+|:-----|:------------|
+| `search_function` | Find function definitions across Python, JavaScript, and TypeScript files |
+| `search_code` | Full-text search across all code files in a directory tree |
+| `get_project_structure` | Generate a tree-view representation of the project directory |
+| `analyze_dependencies` | Parse and analyze project dependency manifests |
+| `find_components` | Discover React and React Native component definitions |
 
 ### Resources
 
-- **/file/list/{directory}**: List files in a directory
-- **/file/read/{filepath}**: Read file contents
-- **/file/info/{filepath}**: Get file metadata
-- **/file/changes/{directory}**: Get recently modified files
+| URI | Description |
+|:----|:------------|
+| `file/list/{directory}` | List files in a directory |
+| `file/read/{filepath}` | Read file contents (with LRU caching) |
+| `file/info/{filepath}` | Get file metadata (size, timestamps) |
+| `file/changes/{directory}` | Get recently modified files (watchdog-backed) |
 
-## 3. DeepSeek R1 extended MCP Server
-
-This MCP server provides access to DeepSeek AI models for text generation, summarization, and document processing.
-
-### Installation
-
-1. Ensure you have Node.js 14+ installed
-2. Install dependencies:
-   ```bash
-   npm install @modelcontextprotocol/sdk openai dotenv
-   ```
-3. Set up environment variables:
-   ```bash
-   # Create a .env file
-   echo "DEEPSEEK_API_KEY=your_api_key_here" > .env
-   ```
-
-### Features
-
-- Text generation using DeepSeek R1 model
-- Text summarization
-- Streaming text generation
-- Multi-model support
-- Document processing (summarize, extract entities, analyze sentiment)
-- File operations for saving outputs
-
-### Usage
-
-Start the server:
+### Quick Start
 
 ```bash
-node deepseek_mcp.js
+cd Model-Context-Protocol-servers
+pip install "mcp[cli]" watchdog
+python code_server.py
 ```
 
-The server provides the following tools:
+<br>
 
-- **deepseek_r1**: Generate text using DeepSeek R1 model
-- **deepseek_summarize**: Summarize text
-- **deepseek_stream**: Stream text generation
-- **deepseek_multi**: Generate text using different DeepSeek models
-- **deepseek_document**: Process documents (summarize, extract entities, analyze sentiment)
+---
+
+## DeepSeek R1 Server
+
+An MCP server that integrates with [DeepSeek AI](https://www.deepseek.com/) models for text generation, summarization, streaming output, and document processing. Supports multiple DeepSeek models (Reasoner, Chat, Coder) through the OpenAI-compatible API. Includes an in-memory response cache and file persistence for generated outputs.
+
+### Tools
+
+| Tool | Description |
+|:-----|:------------|
+| `deepseek_r1` | Generate text using the DeepSeek Reasoner model (optimized for complex reasoning) |
+| `deepseek_summarize` | Condense text into a summary |
+| `deepseek_stream` | Stream text generation with chunked output |
+| `deepseek_multi` | Generate text using a caller-specified DeepSeek model variant |
+| `deepseek_document` | Process documents: summarize, extract entities, or analyze sentiment |
 
 ### Resources
 
-- **/model/info**: Get information about supported models
-- **/server/status**: Check server status
-- **/file/save/{filename}**: Save content to a file
-- **/file/list**: List saved files
-- **/file/read/{filename}**: Read saved file contents
+| URI | Description |
+|:----|:------------|
+| `model/info` | Supported models, context lengths, and capabilities |
+| `server/status` | Server health and uptime status |
+| `file/save/{filename}` | Persist generated content to disk |
+| `file/list` | List previously saved output files |
+| `file/read/{filename}` | Read a saved output file |
 
-## 4. JSON Manager MCP Server
+### Supported Models
 
-This MCP server provides advanced JSON querying and manipulation capabilities.
+| Model | Context | Optimized For |
+|:------|:--------|:--------------|
+| DeepSeek-Reasoner (R1) | 8K tokens | Complex reasoning, math, code |
+| DeepSeek-Chat (V3) | 8K tokens | General conversation and knowledge |
+| DeepSeek-Coder | 16K tokens | Code generation, debugging, explanation |
 
-### Installation
-
-1. Ensure you have Node.js 14+ installed
-2. Install dependencies:
-   ```bash
-   npm install @modelcontextprotocol/sdk node-fetch jsonpath
-   ```
-
-### Features
-
-- Query JSON data using JSONPath
-- Advanced filtering
-- String operations
-- Numeric operations
-- Date operations
-- Array transformations
-- Complex data comparisons
-- Result caching
-- Save and manage query results
-
-### Usage
-
-Start the server:
+### Quick Start
 
 ```bash
-node json_mcp.js
+cd Model-Context-Protocol-servers
+echo "DEEPSEEK_API_KEY=your_key_here" > .env
+npm install @modelcontextprotocol/sdk openai dotenv
+node deepseek.py                # Starts on stdio transport
 ```
 
-The server provides the following tools:
+<br>
 
-- **query**: Query JSON data using JSONPath expressions
-- **filter**: Filter JSON data based on conditions
-- **save_query**: Save query results to a file
-- **compare_json**: Compare two JSON datasets
+---
+
+## JSON Manager Server
+
+An MCP server for querying, filtering, comparing, and caching JSON data. Uses JSONPath expressions for traversal, supports advanced filtering with string, numeric, and date operations, and provides persistent query storage. Supports both stdio and HTTP transports.
+
+### Tools
+
+| Tool | Description |
+|:-----|:------------|
+| `query` | Query JSON data using JSONPath expressions with array operations |
+| `filter` | Filter JSON arrays by field conditions (equality, range, pattern matching) |
+| `save_query` | Persist query results to disk for later retrieval |
+| `compare_json` | Diff two JSON datasets and report structural/value differences |
 
 ### Resources
 
-- **/saved_queries/list**: List saved queries
-- **/saved_queries/get/{filename}**: Retrieve a saved query
-- **/cache/status**: Check cache status
-- **/cache/clear**: Clear the cache
+| URI | Description |
+|:----|:------------|
+| `saved_queries/list` | List all saved query result files |
+| `saved_queries/get/{filename}` | Retrieve a previously saved query result |
+| `cache/status` | Cache size, TTL configuration, and entry ages |
+| `cache/clear` | Flush the in-memory query cache |
+
+### Quick Start
+
+```bash
+cd Model-Context-Protocol-servers
+npm install @modelcontextprotocol/sdk node-fetch jsonpath
+node json.py                          # stdio transport (default)
+node json.py --port=3000              # HTTP transport
+```
+
+<br>
+
+---
+
+<details>
+<summary><strong>Project Structure</strong></summary>
+<br>
+
+```
+.
+├── firecrawl-mcp-server/                  # TypeScript — Firecrawl + Leafly MCP server
+│   ├── src/
+│   │   ├── index.ts                       # MCP server entry point (10 tools)
+│   │   ├── leafly-scraper.ts              # Strain data extraction engine
+│   │   ├── leafly-scraper-cli.ts          # CLI interface for direct scraping
+│   │   └── index.test.ts                  # Jest test suite
+│   ├── leafly-extract-data/               # Extracted strain datasets (batches + individual)
+│   ├── leafly-analysis/                   # Raw HTML analysis of strain pages
+│   ├── extract-test-output/               # Sample extraction results
+│   ├── Dockerfile                         # Container build
+│   ├── package.json
+│   └── tsconfig.json
+│
+├── Model-Context-Protocol-servers/        # Python + JavaScript MCP servers
+│   ├── code_server.py                     # Codebase analysis server (Python, FastMCP)
+│   ├── deepseek.py                        # DeepSeek R1 server (JavaScript, FastMCP)
+│   ├── json.py                            # JSON manager server (JavaScript, FastMCP)
+│   ├── main.py                            # Python entry point
+│   └── pyproject.toml                     # Python project configuration
+│
+├── terminal-top-panel.svg                 # README header graphic
+├── terminal-bottom-panel.svg              # README footer graphic
+└── README.md
+```
+
+</details>
+
+<br>
+
+## Getting Started
+
+### Prerequisites
+
+- **Node.js 18+** for the Firecrawl, DeepSeek, and JSON servers
+- **Python 3.12+** for the codebase analysis server
+- **Firecrawl API key** for the web scraping server (obtain from [firecrawl.dev](https://www.firecrawl.dev/))
+- **DeepSeek API key** for the DeepSeek R1 server (obtain from [deepseek.com](https://www.deepseek.com/))
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/adi2355/Model-Context-Protocol-servers.git
+cd Model-Context-Protocol-servers
+
+# Firecrawl server
+cd firecrawl-mcp-server && npm install && npm run build && cd ..
+
+# Python codebase server
+cd Model-Context-Protocol-servers && pip install "mcp[cli]" watchdog && cd ..
+```
+
+### Environment Variables
+
+| Variable | Server | Required |
+|:---------|:-------|:---------|
+| `FIRECRAWL_API_KEY` | Firecrawl Web Scraping | Yes |
+| `DEEPSEEK_API_KEY` | DeepSeek R1 | Yes |
+
+<br>
 
 ## License
+
 MIT License
+
+<br>
+
+<div align="center">
+  <img src="./terminal-bottom-panel.svg" alt="Terminal Bottom Panel" width="100%" />
+</div>

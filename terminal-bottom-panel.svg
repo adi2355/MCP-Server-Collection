@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 56" role="img" aria-labelledby="title desc">
+  <title id="title">Terminal footer</title>
+  <desc id="desc">A restrained Apple Terminal-style footer panel with matching border treatment and rounded lower corners.</desc>
+
+  <defs>
+    <linearGradient id="bodyFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#111821"/>
+      <stop offset="100%" stop-color="#0d131b"/>
+    </linearGradient>
+
+    <linearGradient id="topGlow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <linearGradient id="bottomBlend" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d131b" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#0d131b" stop-opacity="0.18"/>
+    </linearGradient>
+
+    <path id="footerShape" d="
+      M 6 0
+      H 1194
+      V 38
+      Q 1194 56 1178 56
+      H 22
+      Q 6 56 6 38
+      Z
+    " />
+  </defs>
+
+  <!-- outer panel -->
+  <use href="#footerShape" fill="url(#bodyFill)" stroke="#202833" stroke-width="1"/>
+
+  <!-- subtle inner top seam so it feels intentionally framed -->
+  <line x1="6" y1="0.5" x2="1194" y2="0.5" stroke="#2a3440" stroke-opacity="0.9"/>
+
+  <!-- faint top highlight, same family as the top banner -->
+  <rect x="7" y="1" width="1186" height="10" fill="url(#topGlow)"/>
+
+  <!-- content -->
+  <text
+    x="32"
+    y="34"
+    fill="#94a0ac"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="14"
+    letter-spacing="0.2"
+  >
+    ~/github/adi2355/model-context-protocol-servers.txt
+  </text>
+
+  <text
+    x="1168"
+    y="34"
+    text-anchor="end"
+    fill="#f3c57c"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="14"
+    letter-spacing="0.3"
+  >
+    EOF
+  </text>
+
+  <!-- quiet bottom density so the panel resolves cleanly -->
+  <rect x="6" y="40" width="1188" height="16" fill="url(#bottomBlend)"/>
+</svg>

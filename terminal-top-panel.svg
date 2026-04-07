@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 160" role="img" aria-labelledby="title desc">
+  <title id="title">Terminal intro panel</title>
+  <desc id="desc">A refined terminal-style top panel with attached title bar and terminal identity text.</desc>
+
+  <defs>
+    <linearGradient id="barFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d4cec5"/>
+      <stop offset="100%" stop-color="#c8c1b7"/>
+    </linearGradient>
+
+    <linearGradient id="bodyFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#111821"/>
+      <stop offset="100%" stop-color="#0d131b"/>
+    </linearGradient>
+
+    <linearGradient id="topGlow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <linearGradient id="bottomBlend" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d131b" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#0d131b" stop-opacity="0"/>
+    </linearGradient>
+
+    <path id="panelShape" d="
+      M 22 0
+      H 1178
+      Q 1194 0 1194 16
+      V 160
+      H 6
+      V 16
+      Q 6 0 22 0
+      Z
+    " />
+  </defs>
+
+  <!-- unified outer body with flat bottom -->
+  <use href="#panelShape" fill="url(#bodyFill)"/>
+
+  <!-- title bar -->
+  <rect
+    x="6"
+    y="0"
+    width="1188"
+    height="32"
+    rx="16"
+    fill="url(#barFill)"
+    stroke="#b8b1a6"
+    stroke-opacity="0.85"
+  />
+
+  <!-- flatten lower corners of title bar so it feels attached -->
+  <rect
+    x="6"
+    y="16"
+    width="1188"
+    height="16"
+    fill="url(#barFill)"
+  />
+
+  <!-- top inner highlight -->
+  <rect
+    x="7"
+    y="1"
+    width="1186"
+    height="10"
+    rx="15"
+    fill="url(#topGlow)"
+  />
+
+  <!-- window dots -->
+  <circle cx="30" cy="16" r="5" fill="#f06a61"/>
+  <circle cx="50" cy="16" r="5" fill="#ddb14c"/>
+  <circle cx="70" cy="16" r="5" fill="#58bb69"/>
+
+  <!-- centered title -->
+  <text
+    x="600"
+    y="20.5"
+    text-anchor="middle"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="13"
+    letter-spacing="0.5"
+    fill="#60584f"
+  >
+    model-context-protocol-servers.txt
+  </text>
+
+  <!-- seam under title bar -->
+  <line
+    x1="6"
+    y1="32"
+    x2="1194"
+    y2="32"
+    stroke="#bfb7ae"
+    stroke-opacity="0.32"
+  />
+
+  <!-- terminal text -->
+  <text
+    x="48"
+    y="96"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="26"
+    letter-spacing="0"
+    fill="#f3c57c"
+  >
+    &gt; MCP Server Collection
+  </text>
+
+  <text
+    x="48"
+    y="124"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="14"
+    letter-spacing="0.2"
+    fill="#94a0ac"
+  >
+    Scraping · Extraction · AI · Agent Workflows
+  </text>
+
+  <!-- subtle fade so the bottom feels open into the scene below -->
+  <rect x="6" y="144" width="1188" height="16" fill="url(#bottomBlend)" />
+</svg>
